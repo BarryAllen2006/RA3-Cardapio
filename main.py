@@ -140,9 +140,63 @@ def removeItem():
     save()
 
 def editItem():
-    # TO DO
-    # Bruno Reich
-    pass
+    # Verifica se a lista de produtos está vazia
+    if not produtos:
+        print("A lista de produtos está vazia. Nenhum item para editar.")
+        return
+    
+    print("Escolha um item que deseja editar: \n")
+    # Exibe os produtos da lista
+    for idx, produto in enumerate(produtos):
+        print(f"Identificador: {idx + 1}"
+              + f"| Categoria: {produto['category']} "
+              + f"| Tipo: {produto['item']} "
+              + f"| Nome: {produto['name']} "
+              + f"| Preço: {produto['price']}")
+        
+    # Opção para selecionar o item a ser editado
+    optionX = int(input("\nSelecione um identificador: "))
+
+    # Verifica se o índice informado existe na lista
+    if 1 <= optionX <= len(produtos):
+        produto_editado = produtos[optionX - 1]
+        
+        # Pergunta os novos valores para os campos (ou manter o valor atual)
+        print("Deixe em branco para manter o valor atual.")
+
+        nova_categoria = input(f"Nova Categoria ({produto_editado['category']}): ")
+        if nova_categoria:
+            if nova_categoria in categorias.values():
+                produto_editado['category'] = nova_categoria
+            else:
+                print("Categoria inválida. Edição cancelada.")
+                return
+        
+        novo_item = input(f"Novo Tipo ({produto_editado['item']}): ")
+        if novo_item:
+            produto_editado['item'] = novo_item
+        
+        novo_nome = input(f"Novo Nome ({produto_editado['name']}): ")
+        if novo_nome:
+            for p in produtos:
+                if p["name"] == novo_nome:
+                    print("Produto com este nome já existe. Edição cancelada.")
+                    return
+            produto_editado['name'] = novo_nome
+        
+        novo_preco = input(f"Novo Preço ({produto_editado['price']}): ")
+        if novo_preco:
+            produto_editado['price'] = novo_preco
+        
+        # Atualiza o produto na lista
+        produtos[optionX - 1] = produto_editado
+        print("\nItem editado com sucesso!\n")
+    else:
+        print("Identificador inválido. Edição cancelada.")
+        return
+
+    # Salva as alterações no arquivo "cardapio.txt"
+    save()
 
 def searchItem():
     # TO DO
